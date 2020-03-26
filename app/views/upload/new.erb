@@ -1,0 +1,26 @@
+<h1>Upload</h1>
+
+<%= form_with url: {action: :upload}, multipart: true do |f| %>
+  <p>
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </p>
+
+  <p>
+    <%= f.label :file%>
+    <%= f.file_field :file %>
+  </p>
+
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+
+<script type="text/javascript">
+  var f = document.getElementById('file');
+  var t = document.getElementById('title')
+  f.addEventListener('change', (e) => {
+    t.value = f.files[0].name
+    console.log(f.files);
+  });
+</script>
