@@ -6,15 +6,34 @@ class UploadController < ApplicationController
   end
 
   def upload
+    # TODO: get song file type
     uploaded_file = params[:file]
     data = extract_tags(uploaded_file.tempfile)
-    pp data
 
-    # File.open("../music/" + uploaded_file.original_filename, 'wb') do |file|
-    #   pp "### File Open Uploading  ###"
-    #   file.write(uploaded_file.read)
-    # end
+    artist = Artist.find_or_initialize_by(name: data[:artist])
+    if artist.new_record?
+      artist.name = data[:artist]
+      artist.save
+    end
 
+    album = Album.find_or_initialize_by(name: data[:album], artist: artist)
+    if album.new_record?
+      album.artist = artist
+      album.name = data[:album]
+      album.year = data[:year]
+      album.genre = data[:genre]
+      album.save
+    end
+
+    song = Song.find_or_initialize_by(name: data[:title], artist: artist, album: album)
+    if song.new_record?
+      song.artist = artist
+      song.album = album
+      song.name = data[:title]
+      song.track_nr = data[:track_nr]
+      song.save
+      copy_file(artist,album,song,uploaded_file)
+    end
   end
 
   private
@@ -30,5 +49,18 @@ class UploadController < ApplicationController
     data[:track_nr] = tag.track_nr
     data[:genre] = tag.genre
     return data
+  end
+
+  def copy_file(artist,album,song,fi)
+    loc = "../music/#{artist.name}/#{album.name}"
+
+    if Dir.exist?(loc) == false
+      pp FileUtils.mkdir_p(loc)
+    end
+
+    File.open(loc + "/#{song.name}.mp3", 'wb') do |f|
+      pp "### File Open Uploading  ###"
+      f.write(fi.read)
+    end
   end
 end
