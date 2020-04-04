@@ -52,7 +52,7 @@ class UploadController < ApplicationController
   end
 
   def copy_file(artist,album,song,fi)
-    loc = "../music/#{artist.name}/#{album.name}"
+    loc = "/var/www/html/#{artist.name}/#{album.name}"
 
     if Dir.exist?(loc) == false
       pp FileUtils.mkdir_p(loc)
