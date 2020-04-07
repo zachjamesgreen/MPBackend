@@ -1,6 +1,6 @@
 class IndexController < ApplicationController
 
   def index
-    @songs = Song.joins(:artist, :album).all
+    @songs = Song.includes(:artist, :album).all
   end
 end

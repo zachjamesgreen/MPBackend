@@ -7,9 +7,16 @@ class UploadController < ApplicationController
 
   def upload
     # TODO: get song file type
-    uploaded_file = params[:file]
-    data = extract_tags(uploaded_file.tempfile)
+    uploaded_files = params[:file]
+    uploaded_files.each do |f|
+      data = extract_tags(f.tempfile)
+      artist,album,song = save_to_db(data)
+      copy_file(artist,album,song,f)
+    end
+  end
 
+  private
+  def save_to_db(data)
     artist = Artist.find_or_initialize_by(name: data[:artist])
     if artist.new_record?
       artist.name = data[:artist]
@@ -32,11 +39,9 @@ class UploadController < ApplicationController
       song.name = data[:title]
       song.track_nr = data[:track_nr]
       song.save
-      copy_file(artist,album,song,uploaded_file)
     end
+    return [artist,album,song]
   end
-
-  private
   # Takes File location and returns Hash of tag data
   def extract_tags(file)
     data = Hash.new
