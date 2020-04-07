@@ -23,7 +23,7 @@ class UploadController < ApplicationController
       artist.save
     end
 
-    album = Album.find_or_initialize_by(name: data[:album], artist: artist)
+    album = Album.find_or_initialize_by(name: data[:album])
     if album.new_record?
       album.artist = artist
       album.name = data[:album]

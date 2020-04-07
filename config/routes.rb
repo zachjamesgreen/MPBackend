@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   post 'upload/upload',         to: 'upload#upload'
 
   get '/api/songs',             to: 'playerapi#songs'
+  get '/api/songs/album/:id',             to: 'playerapi#songs_by_album'
+  get '/api/songs/artist/:id',             to: 'playerapi#songs_by_artist'
 
   get '/api/album/:id',         to: 'playerapi#album'
   get '/api/albums',            to: 'playerapi#albums'
