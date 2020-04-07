@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/api/songs',             to: 'playerapi#songs'
 
   get '/api/album/:id',         to: 'playerapi#album'
+  get '/api/albums',            to: 'playerapi#albums'
   get '/api/albums/:artist_id', to: 'playerapi#albums'
 
   get '/api/artists',           to: 'playerapi#artists'

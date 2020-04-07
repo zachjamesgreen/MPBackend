@@ -18,7 +18,11 @@ class PlayerapiController < ApplicationController
 
   # GET Albums for artist by id
   def albums
-    albums = Artist.find(params[:artist_id]).albums
+    if params[:artist_id]
+      albums = Artist.find(params[:artist_id]).albums
+    else
+      albums = Album.all
+    end
     render json: albums, include: [:songs]
   end
 
